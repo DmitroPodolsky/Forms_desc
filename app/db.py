@@ -80,6 +80,14 @@ class Manager:
         cursor.close()
         logger.info("Data deleted")
         return True
+    
+    def delete_all_data(self) -> None:
+        """ Delete all data from the table """
+        cursor = self.connection.cursor()
+        cursor.execute("DELETE FROM statistics")
+        self.connection.commit()
+        cursor.close()
+        logger.info("All data deleted")
 
         
 MANAGER = Manager()

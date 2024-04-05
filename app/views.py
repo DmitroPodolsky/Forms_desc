@@ -23,23 +23,21 @@ class TableWindow(QtWidgets.QWidget):
         self.delete_row_button = QtWidgets.QPushButton("Delete by ID")
         self.delete_row_button.clicked.connect(self.delete_row_by_id)
         
+        # QPushButton to delete all rows
+        self.delete_all_button = QtWidgets.QPushButton("Delete All")
+        self.delete_all_button.clicked.connect(self.delete_all_rows)
+        
         layout.addWidget(self.id_edit)
         layout.addWidget(self.delete_row_button)
+        layout.addWidget(self.delete_all_button)  # Add the delete all button to the layout
         self.setLayout(layout)
         
+        # Populate the table with data from the database
         for data in MANAGER.select_data():
             self.add_entry(*data)
 
     def add_entry(self, static_id: int, form: str, calculation: str, date_created: str) -> None:
-        """
-        Add entry to the table
-        
-        Args:
-            static_id: ID of the entry
-            form: form of the entry
-            calculation: calculation of the entry
-            date_created: date of creation of the entry
-        """
+        """ Add entry to the table """
         row_position = self.table.rowCount()
         self.table.insertRow(row_position)
         
@@ -49,7 +47,6 @@ class TableWindow(QtWidgets.QWidget):
         self.table.setItem(row_position, 2, QtWidgets.QTableWidgetItem(calculation))
         self.table.setItem(row_position, 3, QtWidgets.QTableWidgetItem(date_created))
         
-    # Function to delete a row by id
     def delete_row_by_id(self) -> None:
         """ Delete row by ID """
         if id_to_delete := self.id_edit.text():
@@ -65,3 +62,10 @@ class TableWindow(QtWidgets.QWidget):
         logger.warning("ID not entered")
         QtWidgets.QMessageBox.warning(self, "Warning", "ID not entered")
         
+    def delete_all_rows(self) -> None:
+        """ Delete all rows from the table and database """
+        row_count = self.table.rowCount()
+        MANAGER.delete_all_data()
+        for _ in range(row_count):
+            self.table.removeRow(0)
+
