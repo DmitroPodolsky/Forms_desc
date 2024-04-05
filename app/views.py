@@ -52,11 +52,16 @@ class TableWindow(QtWidgets.QWidget):
     # Function to delete a row by id
     def delete_row_by_id(self) -> None:
         """ Delete row by ID """
-        id_to_delete = int(self.id_edit.text())
-        for row in range(self.table.rowCount()):
-            if int(self.table.item(row, 0).text()) == id_to_delete:
-                MANAGER.delete_data(id_to_delete)
-                self.table.removeRow(row)
-                return
-        logger.warning("ID not found")
-        QtWidgets.QMessageBox.warning(self, "Warning", "ID not found")
+        if id_to_delete := self.id_edit.text():
+            id_to_delete = int(self.id_edit.text())
+            for row in range(self.table.rowCount()):
+                if int(self.table.item(row, 0).text()) == id_to_delete:
+                    MANAGER.delete_data(id_to_delete)
+                    self.table.removeRow(row)
+                    return
+            logger.warning("ID not found")
+            QtWidgets.QMessageBox.warning(self, "Warning", "ID not found")
+            return
+        logger.warning("ID not entered")
+        QtWidgets.QMessageBox.warning(self, "Warning", "ID not entered")
+        
