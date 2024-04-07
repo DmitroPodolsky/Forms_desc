@@ -50,6 +50,10 @@ class TableWindow(QtWidgets.QWidget):
     def delete_row_by_id(self) -> None:
         """ Delete row by ID """
         if id_to_delete := self.id_edit.text():
+            if not id_to_delete.isdigit():
+                logger.warning(f"bad id: {id_to_delete}")
+                QtWidgets.QMessageBox.warning(self, "Warning", "ID must be an integer")
+                return
             id_to_delete = int(self.id_edit.text())
             for row in range(self.table.rowCount()):
                 if int(self.table.item(row, 0).text()) == id_to_delete:

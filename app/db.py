@@ -66,7 +66,7 @@ class Manager:
 
         return data
 
-    def delete_data(self, id_static: int) -> bool:
+    def delete_data(self, id_static: int) -> None:
         """
         Delete data from table
         
@@ -79,7 +79,6 @@ class Manager:
         self.connection.commit()
         cursor.close()
         logger.info("Data deleted")
-        return True
     
     def delete_all_data(self) -> None:
         """ Delete all data from the table """
